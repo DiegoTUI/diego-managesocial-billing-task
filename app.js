@@ -11,7 +11,7 @@ let server;
 
 // handle all uncaught exceptions
 process.on('uncaughtException', function(uncaughtException) {
-    console.fatal(uncaughtException);
+    console.error(uncaughtException);
 });
 
 // create the app
