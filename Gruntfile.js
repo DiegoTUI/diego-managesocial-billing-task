@@ -4,8 +4,8 @@ module.exports = function(grunt) {
     const sourceFiles = [
         '*.js',
         'bin/*.js',
-        'routes/*.js',
-        'test/**/*.js'
+        'routes/**/*.js',
+        'tests/**/*.js'
     ];
     grunt.initConfig({
         jshint: {
