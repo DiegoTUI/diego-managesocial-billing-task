@@ -7,10 +7,9 @@ const bodyParser = require('body-parser');
 
 const charges = require('./routes/charges');
 const customers = require('./routes/customers');
+let server;
 
-/**
- * Handle all uncaught exceptions
- */
+// handle all uncaught exceptions
 process.on('uncaughtException', function(uncaughtException) {
     console.fatal(uncaughtException);
 });
@@ -30,9 +29,10 @@ app.locals.ENV_DEVELOPMENT = env == 'development';
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 
+// create the routes
 app.use('/charges', charges);
 app.use('/customers', customers);
 
@@ -47,25 +47,52 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res) {
-        res.status(err.status || 500);
-        res.json('error', {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500).json({
             message: 'service unavailable',
             error: err
         });
+
+        return next();
     });
 }
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res) {
-    res.status(err.status || 500);
-    res.json({
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500).json({
         message: 'service unavailable'
     });
+
+    return next();
 });
+
+/**
+ * Starts the app and resolves a promise when started
+ */
+app.startApp = function() {
+    app.set('port', process.env.PORT || 3000);
+
+    return new Promise((resolve) => {
+        server = app.listen(app.get('port'), function() {
+            console.log('Express server listening on port ' + server.address().port);
+            return resolve();
+        });
+    });
+};
+
+/**
+ * Stops the app and resolves a promise when stopped
+ */
+app.stopApp = function() {
+    return new Promise((resolve) => {
+        server.close(() => {
+            console.log('server closed');
+            return resolve();
+        });
+    });
+};
 
 
 module.exports = app;
