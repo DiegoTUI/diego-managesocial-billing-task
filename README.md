@@ -8,17 +8,17 @@ A simple server enabling a couple of endpoints against the Stripe API.
 - [Git](https://git-scm.com/)
 - [Node.js and npm](nodejs.org) Node 6 LTS Boron = 6.X, npm 3 LTS = 3.X
 
-### Developing && Testing
+### Installing and Testing
 
-1. Clone this repo `git clone https://github.com/DiegoTUI/diego-managesocial-billing-task.git`.
-2. Run `npm install` to install server dependencies.
-3. Run `npm test` to run the code linter and the integration tests.
-4. Run `npm start` to start the server in port 3000 (you can change the port by assigning the environment variable `PORT`).
-
-This app connects to Stripe using [Stripe's API](https://stripe.com/docs/api). You will need to enter your own Stripe secret key by creating a file named `.env` in the root folder of the project and adding the line
+- Clone this repo `git clone https://github.com/DiegoTUI/diego-managesocial-billing-task.git`.
+- Run `npm install` to install server dependencies.
+- This app connects to Stripe using [Stripe's API](https://stripe.com/docs/api). You will need to enter your own Stripe secret key by creating a file named `.env` in the root folder of the project and adding the line
 ```
 STRIPE_KEY=sk_test_useyourownkey
 ```
+- Run `npm test` to run the code linter and the integration tests.
+- Run `npm start` to start the server in port 3000 (you can change the port by assigning the environment variable `PORT`).
+
 ## Endpoints
 ### Create a user ([POST]/customers)
 Creates a new user on Stripe. It uses exactly the same interface (request and response) as [Stripe's Create Customer endpoint](https://stripe.com/docs/api#create_customer). There are no compulsory parameters in this request (i.e. the body could be empty), although in order to create a user that you can later charge, you will need to specify at least one credit card.
