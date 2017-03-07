@@ -1,7 +1,12 @@
 'use strict';
-let requestLib = require('request-promise');
+const requestLib = require('request-promise');
 
-exports.getCharges = function(req, res) {
+/**
+ * Retrieves the charges of a certain user given by it's customer_id
+ * It send a request to Stripe's "List all charges" operation specifying the customer parameter
+ * see https://stripe.com/docs/api#list_charges for more info
+ */
+exports.getCustomerCharges = function(req, res) {
   	const options = {
         url: 'https://api.stripe.com/v1/charges',
         method: 'GET',
@@ -23,6 +28,11 @@ exports.getCharges = function(req, res) {
     .catch(error => res.status(error.statusCode || 500).json(error));
 };
 
+/**
+ * Performs a charge against the credit card of a certaing customer
+ * It uses the same interface as Stripe's Create A Charge endpoint
+ * see https://stripe.com/docs/api#create_charge for more info
+ */
 exports.performCharge = function(req, res) {
 	const options = {
         url: 'https://api.stripe.com/v1/charges',
@@ -32,9 +42,10 @@ exports.performCharge = function(req, res) {
             pass: ''
         },
         headers: {
-	        'Content-Type': 'application/json'
+	        'Content-Type': 'application/x-www-form-urlencoded'
 	    },
-        json: req.body
+        form: req.body,
+        json: true
     };
 
     requestLib(options)
